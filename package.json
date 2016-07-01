@@ -1,0 +1,34 @@
+{
+  "name": "ag",
+  "version": "1.0.0",
+  "description": "algoritmo genético em Node",
+  "main": "index.js",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "mathjs": "^3.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eduardo-cess/ag.git"
+  },
+  "bin": {
+    "democli": "index.js"
+  },
+  "keywords": [
+    "genetic",
+    "algorithm",
+    "ag",
+    "ga",
+    "node"
+  ],
+  "author": "Carlos Eduardo Santiago",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eduardo-cess/ag/issues"
+  },
+  "homepage": "https://github.com/eduardo-cess/ag#readme"
+}
