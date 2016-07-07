@@ -1,18 +1,23 @@
 #!/usr/bin/env node
 
 m = require('mathjs');
+u = require('underscore');
+$ = require('jquery');
 
+pop = new Array();
+//wt(bin2Float('0000101000011000000001'));
+inicializar(10, 10);
+wt(pop);
 
-
-
-wt(bin2Dec('-10000010110111000011'));
-// for (var i = -100; i < 100; i++) {
-// 	wt(f6(i,2));
-
-// }
-
-function bin2Dec(binary){
-	return parseInt(binary, 2);
+function bin2Float(binary){
+	var scope = {
+		l: binary.length,
+		xmin: -100,
+		xmax: 100,
+		i: parseInt(binary, 2)
+	};
+	//wt(binary.length);
+	return m.eval('xmin+((xmax-xmin)/(2^l-1)*i)',scope);
 }
 
 
@@ -29,8 +34,14 @@ function wt(texto){
 	console.log(texto);
 }
 
-function inicializar(){
-
+function inicializar(qtd_pop, qtd_bits){
+	var cromossomo = new Array();
+	for(i in u.range(qtd_pop)){
+		for(j in u.range(qtd_bits))
+			cromossomo.push(m.randomInt(2))
+		pop.push(cromossomo);
+		cromossomo = [];
+	}
 }
 
 function avaliar(){
