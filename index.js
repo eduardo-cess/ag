@@ -1,13 +1,25 @@
 #!/usr/bin/env node
+console.time("time");
 
 m = require('mathjs');
 u = require('underscore');
-$ = require('jquery');
+//$ = require('jquery');
 
 pop = new Array();
-//wt(bin2Float('0000101000011000000001'));
-inicializar(10, 10);
+aptidao_pop = new Array();
+geracao = 0
+
+inicializar(10, 50);
+avaliar();
 wt(pop);
+
+
+
+
+
+
+
+
 
 function bin2Float(binary){
 	var scope = {
@@ -45,6 +57,20 @@ function inicializar(qtd_pop, qtd_bits){
 }
 
 function avaliar(){
+	var x = new Array();
+	var y = new Array();
+
+	for(i in pop){
+		for(j in pop[i]){
+			if(j < pop[i].length/2)
+				x.push(pop[i][j]);
+			else
+				y.push(pop[i][j]);
+		}
+		//wt('x: '+x);wt('y: '+y);
+		pop[i].push(f6(bin2Float(x),bin2Float(y)));
+		x=[];y=[];
+	}
 
 }
 
@@ -59,3 +85,5 @@ function mutacao(){
 function selecionar(){
 
 }
+
+console.timeEnd("time");
