@@ -8,10 +8,12 @@ u = require('underscore');
 pop = new Array();
 aptidao_pop = new Array();
 geracao = 0
+tc = 0.75;
+tm = 0.01;
 
 inicializar(10, 50);
 avaliar();
-wt(pop);
+wt(aptidao_pop);
 
 
 
@@ -28,10 +30,8 @@ function bin2Float(binary){
 		xmax: 100,
 		i: parseInt(binary, 2)
 	};
-	//wt(binary.length);
 	return m.eval('xmin+((xmax-xmin)/(2^l-1)*i)',scope);
 }
-
 
 function f6(x,y){
 	var scope = {
@@ -48,6 +48,7 @@ function wt(texto){
 
 function inicializar(qtd_pop, qtd_bits){
 	var cromossomo = new Array();
+	var bit;
 	for(i in u.range(qtd_pop)){
 		for(j in u.range(qtd_bits))
 			cromossomo.push(m.randomInt(2))
@@ -67,10 +68,22 @@ function avaliar(){
 			else
 				y.push(pop[i][j]);
 		}
-		//wt('x: '+x);wt('y: '+y);
-		pop[i].push(f6(bin2Float(x),bin2Float(y)));
+		aptidao_pop.push(f6(bin2Float(x),bin2Float(y)));
 		x=[];y=[];
 	}
+}
+
+function reproduzir(){
+	var aptdao_sum = new Array();
+	var soma = 0;
+	for(i in aptidao_pop){
+		soma += aptidao_pop[i];
+		aptdao_sum.push(soma);
+	}
+
+	if(m.random(0,soma))
+
+
 
 }
 
