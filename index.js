@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 console.time("time");
 
-m = require('mathjs');
-u = require('underscore');
-//$ = require('jquery');
+var m = require('mathjs');
+var u = require('underscore');
 
 pop = new Array();
 aptidao_pop = new Array();
@@ -13,10 +12,8 @@ tm = 0.01;
 
 inicializar(10, 50);
 avaliar();
+reproduzir();
 wt(aptidao_pop);
-
-
-
 
 
 
@@ -30,7 +27,7 @@ function bin2Float(binary){
 		xmax: 100,
 		i: parseInt(binary, 2)
 	};
-	return m.eval('xmin+((xmax-xmin)/(2^l-1)*i)',scope);
+	return m.eval('xmin+(i*(xmax-xmin)/((2^l)-1))',scope);
 }
 
 function f6(x,y){
@@ -51,25 +48,23 @@ function inicializar(qtd_pop, qtd_bits){
 	var bit;
 	for(i in u.range(qtd_pop)){
 		for(j in u.range(qtd_bits))
-			cromossomo.push(m.randomInt(2))
+			cromossomo.push(m.randomInt(2));
 		pop.push(cromossomo);
 		cromossomo = [];
 	}
 }
 
 function avaliar(){
-	var x = new Array();
-	var y = new Array();
+	var x, x_string, y, y_string;
 
 	for(i in pop){
-		for(j in pop[i]){
-			if(j < pop[i].length/2)
-				x.push(pop[i][j]);
-			else
-				y.push(pop[i][j]);
-		}
-		aptidao_pop.push(f6(bin2Float(x),bin2Float(y)));
-		x=[];y=[];
+		x = pop[i].slice(0,25);
+		y = pop[i].slice(25,50);	
+		x_string = String(x).replace(/,/g , "");
+		y_string = String(y).replace(/,/g , "");
+		//wt("x: "+x_string+" float: "+bin2Float(x_string)+' int: '+parseInt(x_string, 2));
+		//wt("y: "+y_string+" float: "+bin2Float(y_string)+' int: '+parseInt(y_string, 2));
+		aptidao_pop.push(f6(bin2Float(x_string),bin2Float(y_string)));
 	}
 }
 
@@ -80,8 +75,9 @@ function reproduzir(){
 		soma += aptidao_pop[i];
 		aptdao_sum.push(soma);
 	}
-
-	if(m.random(0,soma))
+	wt(aptdao_sum);
+	wt(m.random(0,soma));
+	//if(m.random(0,soma))
 
 
 
