@@ -5,7 +5,9 @@ var mysql = require('mysql');
 var m = require('mathjs');
 var u = require('underscore');
 
-var array_populacao_experimento = [10, 20, 30, 40, 50, 60, 80, 90, 100];
+
+// var array_populacao_experimento = [10, 20, 30, 40, 50, 60, 80, 90, 100]; dá problema de ETIMEDOUT
+var array_populacao_experimento = [100];
 var experimento = 1
 var tc = 0.75, tm = 0.01, qtd_geracoes = 10, qtd_pop = 0, qtd_bits = 50, melhor_aptidao = 0.0;
 var pop = new Array(),aptdao_sum = new Array(),pais = new Array(),aptidao_pop = new Array(),filhos = new Array(),mais_apto = new Array();
