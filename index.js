@@ -3,23 +3,22 @@ console.time("time");
 
 var m = require('mathjs');
 var u = require('underscore');
+var Random = require('random-js');
 
-var tc = 0.75, tm = 0.01, qtd_geracoes = 100, qtd_pop = 100, qtd_bits = 50;
-var pop = new Array(), aptdao_sum = new Array(), pais = new Array(), aptidao_pop = new Array(), filhos = new Array();
+var tc = 0.75, tm = 0.01, qtd_geracoes = 100, qtd_pop = 100, qtd_bits = 50, melhor_aptidao = 0.0;
+var pop = new Array(),aptdao_sum = new Array(),pais = new Array(),aptidao_pop = new Array(),filhos = new Array(),mais_apto = new Array();
 
 inicializar(qtd_pop, qtd_bits);
 avaliar();
 for(geracao in u.range(qtd_geracoes)){
 	reproduzir();
 	avaliar();
-	wt('geração: '+geracao);
+	console.log('geração: '+geracao);
 }
 
-wt(aptidao_pop);
+console.log('Melhor aptidão: '+melhor_aptidao);
 
-
-
-
+//***********************FUNÇÕES******************************
 
 function bin2Float(binary){
 	var scope = {
@@ -38,10 +37,6 @@ function f6(x,y){
 	};
 
 	return m.eval('0.5-(((sin(sqrt(x^2+y^2)))^2)-0.5)/(1+0.001*(x^2+y^2))^2',scope);
-}
-
-function wt(texto){
-	console.log(texto);
 }
 
 function inicializar(qtd_pop, qtd_bits){
@@ -76,6 +71,7 @@ function reproduzir(){
 		aptdao_sum.push(soma_aptidao);
 	}
 	
+	filhos.push(select_mais_apto());
 	selecionar(soma_aptidao);
 	
 	while(filhos.length < pop.length){
@@ -117,13 +113,31 @@ function selecionar(soma_aptidao){
 		if (aptdao_sum[i] >= rand){
 			pais.push(pop[i]);
 			rand = m.random(0,soma_aptidao);
-			aptdao_sum[i] = 0.01; //pog
+			//aptdao_sum[i] = 0.01; //pog
 		}
 		if(pais.length == 2)
 			break;
 	}
 	if(pais.length < 2)
 		selecionar(soma_aptidao);
+}
+
+function select_mais_apto(){
+	for(i in aptidao_pop){
+		if(aptidao_pop[i] > melhor_aptidao){
+			mais_apto = pop[i];
+			melhor_aptidao = aptidao_pop[i];
+		}
+	}
+	return mais_apto;
+}
+
+function media_array(array){
+	var sum = 0;
+	for( var i = 0; i < array.length; i++ )
+	    sum += array[i]; 
+
+	return sum/array.length;
 }
 
 console.timeEnd("time");
