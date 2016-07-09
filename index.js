@@ -4,16 +4,14 @@ console.time("time");
 var m = require('mathjs');
 var u = require('underscore');
 
-pop = new Array();
-aptidao_pop = new Array();
-geracao = 0
-tc = 0.75;
-tm = 0.01;
+
+var geracao = 0, tc = 0.75, tm = 0.01;
+var pop = new Array(), aptdao_sum = new Array(), pais = new Array(), aptidao_pop = new Array();
 
 inicializar(10, 50);
 avaliar();
 reproduzir();
-wt(aptidao_pop);
+//wt(pop[0]);
 
 
 
@@ -64,23 +62,19 @@ function avaliar(){
 		y_string = String(y).replace(/,/g , "");
 		//wt("x: "+x_string+" float: "+bin2Float(x_string)+' int: '+parseInt(x_string, 2));
 		//wt("y: "+y_string+" float: "+bin2Float(y_string)+' int: '+parseInt(y_string, 2));
-		aptidao_pop.push(f6(bin2Float(x_string),bin2Float(y_string)));
+		pop[i].push(f6(bin2Float(x_string),bin2Float(y_string)));
 	}
 }
 
 function reproduzir(){
-	var aptdao_sum = new Array();
-	var soma = 0;
-	for(i in aptidao_pop){
-		soma += aptidao_pop[i];
+	var filhos = new Array(), soma = 0;
+	for(i in pop){
+		soma += u.last(pop[i]);
 		aptdao_sum.push(soma);
 	}
-	wt(aptdao_sum);
-	wt(m.random(0,soma));
-	//if(m.random(0,soma))
 
-
-
+	selecionar(soma);
+	wt(pais);
 }
 
 function cruzamento(){
@@ -91,8 +85,23 @@ function mutacao(){
 
 }
 
-function selecionar(){
+function selecionar(soma_aptidao){
+	var rand = m.random(0,soma_aptidao);
 
+	for(i in aptdao_sum){
+		if (aptdao_sum[i] >= rand){
+			pais.push(pop[i]);
+			rand = m.random(0,soma_aptidao);
+			aptdao_sum[i] = 0;
+		}
+		if(pais.length == 2)
+			break;
+		wt(u.last(pop[i]));
+		wt(rand);
+		wt('');
+	}
+	if(pais.length < 2)
+		selecionar(soma_aptidao);
 }
 
 console.timeEnd("time");
