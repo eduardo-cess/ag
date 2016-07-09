@@ -4,15 +4,18 @@ console.time("time");
 var m = require('mathjs');
 var u = require('underscore');
 
+var tc = 0.75, tm = 0.01, qtd_geracoes = 100, qtd_pop = 100, qtd_bits = 50;
+var pop = new Array(), aptdao_sum = new Array(), pais = new Array(), aptidao_pop = new Array(), filhos = new Array();
 
-var geracao = 0, tc = 0.75, tm = 0.01;
-var pop = new Array(), aptdao_sum = new Array(), pais = new Array(), aptidao_pop = new Array();
-
-inicializar(10, 50);
+inicializar(qtd_pop, qtd_bits);
 avaliar();
-reproduzir();
-//wt(pop[0]);
+for(geracao in u.range(qtd_geracoes)){
+	reproduzir();
+	avaliar();
+	wt('geração: '+geracao);
+}
 
+wt(aptidao_pop);
 
 
 
@@ -43,7 +46,6 @@ function wt(texto){
 
 function inicializar(qtd_pop, qtd_bits){
 	var cromossomo = new Array();
-	var bit;
 	for(i in u.range(qtd_pop)){
 		for(j in u.range(qtd_bits))
 			cromossomo.push(m.randomInt(2));
@@ -60,29 +62,52 @@ function avaliar(){
 		y = pop[i].slice(25,50);	
 		x_string = String(x).replace(/,/g , "");
 		y_string = String(y).replace(/,/g , "");
-		//wt("x: "+x_string+" float: "+bin2Float(x_string)+' int: '+parseInt(x_string, 2));
-		//wt("y: "+y_string+" float: "+bin2Float(y_string)+' int: '+parseInt(y_string, 2));
-		pop[i].push(f6(bin2Float(x_string),bin2Float(y_string)));
+		//pop[i].push(f6(bin2Float(x_string),bin2Float(y_string)));
+		aptidao_pop.push(f6(bin2Float(x_string),bin2Float(y_string)));
 	}
 }
 
 function reproduzir(){
-	var filhos = new Array(), soma = 0;
-	for(i in pop){
-		soma += u.last(pop[i]);
-		aptdao_sum.push(soma);
-	}
+	var soma_aptidao = 0;
+	aptdao_sum = [];
 
-	selecionar(soma);
-	wt(pais);
+	for(i in aptidao_pop){
+		soma_aptidao += aptidao_pop[i];
+		aptdao_sum.push(soma_aptidao);
+	}
+	
+	selecionar(soma_aptidao);
+	
+	while(filhos.length < pop.length){
+		if(Math.random() <= tc){
+			cruzamento();
+			selecionar(soma_aptidao);
+		}
+	}
+	aptidao_pop = [];
+	pop = filhos;
+
+	mutacao();
 }
 
 function cruzamento(){
-
+	var filho;
+	filho = pais[0].slice(0,25)+pais[1].slice(25,50);
+	filhos.push(String(filho).replace(/,/g , ""));
+	filho = '';
+	filho = pais[1].slice(0,25)+pais[0].slice(25,50);
+	filhos.push(String(filho).replace(/,/g , ""));
+	filho = '';
+	pais = [];
 }
 
 function mutacao(){
-
+	for(i in pop){
+		for(j in pop[i]){
+			if(Math.random() <= tm)
+				pop[i][j] = (pop[i][j] == 0) ? 1 : 0;
+		}
+	}
 }
 
 function selecionar(soma_aptidao){
@@ -92,13 +117,10 @@ function selecionar(soma_aptidao){
 		if (aptdao_sum[i] >= rand){
 			pais.push(pop[i]);
 			rand = m.random(0,soma_aptidao);
-			aptdao_sum[i] = 0;
+			aptdao_sum[i] = 0.01; //pog
 		}
 		if(pais.length == 2)
 			break;
-		wt(u.last(pop[i]));
-		wt(rand);
-		wt('');
 	}
 	if(pais.length < 2)
 		selecionar(soma_aptidao);
