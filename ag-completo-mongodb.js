@@ -46,7 +46,14 @@ MongoClient.connect("mongodb://localhost:27017/ag", function(err, db) {
 		}
 		console.log('Melhor aptidão: '+melhor_aptidao);
 	  
-	  	var info_to_insert = {'_id': experimento,'geracoes': aptidao_pop_total_experimento, 'melhor_individuo': melhor_aptidao, 'qtd_mutacoes:': qtd_mutacoes_experimento};
+	  	var info_to_insert = {
+	  		'_id': experimento,
+	  		'geracoes': aptidao_pop_total_experimento, 
+	  		'melhor_individuo': melhor_aptidao, 
+	  		'qtd_mutacoes:': qtd_mutacoes_experimento,
+	  		'populacao_inicial': qtd_pop
+	  	};
+
 	  	experimento_collection = db.collection('experimento');
   		experimento_collection.insertOne(info_to_insert,{w:1},function(err, r) {
 		    assert.equal(null, err);
